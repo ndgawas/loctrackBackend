@@ -3,7 +3,6 @@ const fetchuser = require("../middleware/fetchuser");
 const Cords = require("../models/Cords");
 const User = require("../models/User");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
 
 router.get("/fetchcords", fetchuser, async (req, res) => {
   try {
