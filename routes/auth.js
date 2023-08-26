@@ -83,7 +83,6 @@ router.post("/login", async (req, res) => {
         id: user.id,
       },
     };
-    console.log(JWT_SECRET);
     const authToken = jwt.sign(data, JWT_SECRET);
     res.json({ success: true, authToken });
   } catch (error) {
