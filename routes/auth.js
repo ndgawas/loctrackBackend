@@ -13,6 +13,7 @@ router.post(
     body("name").isLength({ min: 3 }),
     body("email").isEmail(),
     body("password").isLength({ min: 5 }),
+    body("mac").isLength({ min: 10 }),
   ],
   async (req, res) => {
     const success = false;
@@ -37,6 +38,7 @@ router.post(
         name: req.body.name,
         password: secPass,
         email: req.body.email,
+        mac: req.body.mac,
       });
       const data = {
         user: {

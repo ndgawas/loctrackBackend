@@ -17,14 +17,19 @@ router.get("/fetchcords", fetchuser, async (req, res) => {
   }
 });
 
-router.post("/updatecords", fetchuser, async (req, res) => {
+router.post("/updatecords", async (req, res) => {
   try {
-    let cords = await Cords.findOne({ user: req.user.id });
-    const { lat, lng } = req.body;
+    const { lat, lng, mac } = req.body;
+    let user = await User.findOne({ mac: mac });
+    if (!user) {
+      return res.status(404).send("Internal Mac Address!");
+    }
+    console.log(user);
+    let cords = await Cords.findOne({ user: user });
     if (cords) {
       // update
       const doc = await Cords.findOneAndUpdate(
-        { user: req.user.id },
+        { user: user._id },
         { lat, lng },
         {
           new: true,
@@ -32,7 +37,7 @@ router.post("/updatecords", fetchuser, async (req, res) => {
       );
       return res.status(200).send({ doc });
     } else {
-      const cord = new Cords({ lat, lng, user: req.user.id });
+      const cord = new Cords({ lat, lng, user: user._id });
       const savedCord = await cord.save();
       return res.json(savedCord);
     }
