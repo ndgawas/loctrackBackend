@@ -5,7 +5,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const fetchuser = require("../middleware/fetchuser");
-const JWT_SECRET = "MayureshGawas";
 //Route 1
 router.post(
   "/register",
@@ -45,7 +44,7 @@ router.post(
           id: user.id,
         },
       };
-      const authToken = jwt.sign(data, JWT_SECRET);
+      const authToken = jwt.sign(data, process.env.JWT_SECRET);
       res.json({ success: true, authToken });
     } catch (error) {
       console.log(error.message);
@@ -85,7 +84,7 @@ router.post("/login", async (req, res) => {
         id: user.id,
       },
     };
-    const authToken = jwt.sign(data, JWT_SECRET);
+    const authToken = jwt.sign(data, process.env.JWT_SECRET);
     res.json({ success: true, authToken });
   } catch (error) {
     console.log(error.message);
