@@ -22,7 +22,7 @@ router.post("/updatecords", async (req, res) => {
     const { lat, lng, mac } = req.body;
     let user = await User.findOne({ mac: mac });
     if (!user) {
-      return res.status(404).send("Internal Mac Address!");
+      return res.status(404).send("Wrong Mac Address!");
     }
     console.log(user);
     let cords = await Cords.findOne({ user: user });
@@ -37,9 +37,8 @@ router.post("/updatecords", async (req, res) => {
       );
       return res.status(200).send({ doc });
     } else {
-      const cord = new Cords({ lat, lng, user: user._id });
-      const savedCord = await cord.save();
-      return res.json(savedCord);
+      cords = await Cords.create({ lat, lng, user: user._id });
+      return res.json(cords);
     }
   } catch (error) {
     console.log(error.message);
