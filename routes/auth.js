@@ -24,10 +24,17 @@ router.post(
     // finding if duplicate emails are there or not
     try {
       let user = await User.findOne({ email: req.body.email });
+      let macadd = await User.findOne({ mac: req.body.mac });
       if (user) {
         return res.status(400).json({
           success,
           error: "Sorry a user with this email already exist",
+        });
+      }
+      if (macadd) {
+        return res.status(400).json({
+          success,
+          error: "Sorry a user with this MAC address already exist",
         });
       }
       // crete a User

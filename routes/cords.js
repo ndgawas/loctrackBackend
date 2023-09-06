@@ -2,6 +2,7 @@ const express = require("express");
 const fetchuser = require("../middleware/fetchuser");
 const Cords = require("../models/Cords");
 const User = require("../models/User");
+const Logs = require("../models/Logs");
 const router = express.Router();
 
 router.get("/fetchcords", fetchuser, async (req, res) => {
@@ -24,7 +25,7 @@ router.post("/updatecords", async (req, res) => {
     if (!user) {
       return res.status(404).send("Wrong Mac Address!");
     }
-    console.log(user);
+    const log = await Logs.create({ user: user._id, lat, lng });
     let cords = await Cords.findOne({ user: user });
     if (cords) {
       // update
