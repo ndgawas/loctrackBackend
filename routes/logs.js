@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/fetch-logs", fetchuser, async (req, res) => {
   try {
-    const logs = await Logs.find({ user: req.user.id }).sort("createdAt");
+    const logs = await Logs.find({ user: req.user.id }).sort({ createdAt: -1 });
     if (!logs) {
       return res.status(404).send({ msg: "No Logs" });
     }
