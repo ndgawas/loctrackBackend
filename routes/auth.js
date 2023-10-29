@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
       },
     };
     const authToken = jwt.sign(data, process.env.JWT_SECRET);
-    res.json({ success: true, authToken });
+    res.json({ success: true, authToken, user });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success, error: "Internal Server Error!" });
@@ -105,7 +105,19 @@ router.get("/getuser", fetchuser, async (req, res) => {
   try {
     let userid = req.user.id;
     const user = await User.findById(userid).select("-password");
-    res.send(user);
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error! getuser");
+  }
+});
+
+router.post("/getinfo", async (req, res) => {
+  try {
+    const { mac } = req.body;
+    console.log(mac);
+    const info = await User.findOne({ mac: mac }).select("-password");
+    res.status(200).send(info);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal Server Error! getuser");
@@ -114,7 +126,7 @@ router.get("/getuser", fetchuser, async (req, res) => {
 
 router.put("/updateuser", fetchuser, async (req, res) => {
   try {
-    const { name, email, phone, address, password, mac } = req.body;
+    const { name, email, phone, address, password, mac, pic } = req.body;
     const user = await User.findById(req.user.id);
     if (password && password.length < 6) {
       return res.json({ error: "Password is required and 6 character long" });
@@ -133,13 +145,14 @@ router.put("/updateuser", fetchuser, async (req, res) => {
         phone: phone || user.phone,
         address: address || user.address,
         mac: mac || user.mac,
+        pic: pic || user.pic,
       },
       { new: true }
     );
     res.status(200).send({
       success: true,
       message: "Profile Updated Successfully",
-      updatedUser,
+      user: updatedUser,
     });
   } catch (error) {
     console.log(error);

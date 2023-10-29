@@ -9,6 +9,13 @@ const UserSchema = new Schema(
     mac: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     address: { type: String, required: true },
+    pic: {
+      type: "String",
+      required: true,
+      default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+    },
+    image: { type: String, required: false },
   },
   { timestamps: true }
 );
