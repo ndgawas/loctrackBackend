@@ -37,6 +37,7 @@ router.post(
           error: "Sorry a user with this MAC address already exist",
         });
       }
+
       // crete a User
       const salt = await bcrypt.genSalt(10);
       secPass = await bcrypt.hash(req.body.password, salt);

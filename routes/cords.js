@@ -20,7 +20,9 @@ router.get("/fetchcords", fetchuser, async (req, res) => {
 
 router.post("/updatecords", async (req, res) => {
   try {
+    console.log("In update cords");
     const { lat, lng, mac } = req.body;
+    console.log(lat, lng, mac);
     let user = await User.findOne({ mac: mac });
     if (!user) {
       return res.status(404).send("Wrong Mac Address!");
@@ -46,4 +48,35 @@ router.post("/updatecords", async (req, res) => {
     res.status(500).send("Internal Server Error!");
   }
 });
+
+router.post("/updatecordsapp", async (req, res) => {
+  try {
+    console.log("In update cords");
+    const { lat, lng, mac } = req.body;
+    console.log(lat, lng, mac);
+    let user = await User.findOne({ mac: mac });
+    if (!user) {
+      return res.status(404).send("Wrong Mac Address!");
+    }
+    let cords = await Cords.findOne({ user: user });
+    if (cords) {
+      // update
+      const doc = await Cords.findOneAndUpdate(
+        { user: user._id },
+        { lat, lng },
+        {
+          new: true,
+        }
+      );
+      return res.status(200).send({ doc });
+    } else {
+      cords = await Cords.create({ lat, lng, user: user._id });
+      return res.json(cords);
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
+
 module.exports = router;
