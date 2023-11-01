@@ -7,7 +7,7 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     mac: { type: String, required: true, unique: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: true, unique: true },
     address: { type: String, required: true },
     pic: {
       type: "String",
@@ -15,7 +15,11 @@ const UserSchema = new Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-    image: { type: String, required: false },
+    image: {
+      type: String,
+      required: false,
+      default: "hello.png",
+    },
   },
   { timestamps: true }
 );
