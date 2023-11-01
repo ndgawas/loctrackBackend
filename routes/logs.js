@@ -32,4 +32,28 @@ router.delete("/delete-log/:id", fetchuser, async (req, res) => {
   }
 });
 
+router.post("/createlog", async (req, res) => {
+  try {
+    console.log("In update cords");
+    const { mac } = req.body;
+    console.log(mac);
+    let user = await User.findOne({ mac: mac });
+    console.log(user);
+    if (!user) {
+      return res.status(404).send("Wrong Mac Address!");
+    }
+    let cords = await Cords.findOne({ user: user._id });
+    console.log(cords);
+    const log = await Logs.create({
+      user: user._id,
+      lat: cords.lat,
+      lng: cords.lng,
+    });
+    return res.status(200).send({ log });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
+
 module.exports = router;
