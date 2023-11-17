@@ -18,6 +18,9 @@ const upload = multer({ storage: storage });
 
 router.post("/upload", upload.single("image"), async (req, res) => {
   const { email } = req.body;
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
   try {
     const user = await User.findOne({ email });
     if (user) {
